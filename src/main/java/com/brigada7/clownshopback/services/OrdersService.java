@@ -31,7 +31,7 @@ public class OrdersService {
 		log.info(orderDTO.toString());
 
 		AppUser appUser = (AppUser) authentication.getPrincipal();
-		log.info("User {} try to make an order", appUser.getEmail());
+		log.info("User {} tried to make an order", appUser.getEmail());
 
 		AppUser user = appUserService.getByEmail(appUser.getEmail());
 		Product product = productService.getProductById(orderDTO.getProductId());
