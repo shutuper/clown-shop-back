@@ -9,27 +9,24 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/registration")
+@RequestMapping("/api/v1/registration")
 public class RegistrationController {
 
 	private final AppUserService appUserService;
 
 	@PostMapping
-	public ResponseEntity registrate(
+	public ResponseEntity<?> registrate(
 			@RequestParam("email") String email,
 			@RequestParam("password") String password) {
 		try {
 			AppUser appuser = appUserService.registrate(email, password);
-			return new ResponseEntity(appuser, HttpStatus.OK);
+			return ResponseEntity.ok(appuser);
 		} catch (Exception e) {
-			return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+
 
 		}
 	}
 
-	@GetMapping("isLoggedIn")
-	public ResponseEntity isLogined() {
-		return new ResponseEntity(HttpStatus.OK);
-	}
 
 }

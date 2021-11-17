@@ -1,28 +1,35 @@
 package com.brigada7.clownshopback.dto;
 
-import com.brigada7.clownshopback.models.enums.InventoryStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDTO {
 
+	private Long id;
+
+	@NotEmpty
 	private String description;
 
+	@NotEmpty
 	private String name;
 
+	@Min(0)
+	@Max(1_000_000)
 	private Integer quantity;
 
+	@Min(0)
+	@Max(1_000_000)
 	private Integer price;
 
+	@NotEmpty
 	private String category;
 
 	private String image; // url

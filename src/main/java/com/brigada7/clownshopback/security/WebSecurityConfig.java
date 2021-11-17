@@ -27,16 +27,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private final PasswordEncoder passwordEncoder;
 	private final UserDetailsService userDetailsService;
 
+	private static final String IS_LOGGED_IN_URL = "/api/v1/auth/isLoggedIn";
+	private static final String REGISTRATION_URL = "/api/v1/registration";
+	private static final String PRODUCTS_URL = "/api/v1/products";
+	private static final String ORDERS_URL = "/api/v1/orders";
+	private static final String LOGOUT_URL = "/api/v1/logout";
+	private static final String LOGIN_URL = "/api/v1/login";
+	private static final String ADMIN_URL = "/api/v1/admin";
+	private static final String ALL_URLS = "/**";
+	private static final String USERNAME_PARAMETER = "email";
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+
 		http.csrf().disable()//.and().cors()
 				// all URLs are protected, except 'POST /login' so anonymous user can authenticate
 				.authorizeRequests()
-				.antMatchers(HttpMethod.POST, "/api/login", "/api/registration").permitAll()
-				.antMatchers(HttpMethod.GET, "/api/v1/products").permitAll()
-				.antMatchers("/api/v1/products/admin").hasRole(ADMIN.name())
-				.antMatchers("/api/shop/**", "/api/logout", "/api/registration/isLoggedIn", "/api/v1/products/**", "/api/v1/orders").hasAnyRole(ADMIN.name(), USER.name())
-				.antMatchers("/**").permitAll()
+				.antMatchers(HttpMethod.POST, LOGIN_URL, REGISTRATION_URL).permitAll()
+				.antMatchers(HttpMethod.GET, PRODUCTS_URL).permitAll()
+				.antMatchers(ADMIN_URL, ADMIN_URL.concat(ALL_URLS)).hasRole(ADMIN.name())
+				.antMatchers(LOGOUT_URL, IS_LOGGED_IN_URL, PRODUCTS_URL.concat(ALL_URLS), ORDERS_URL).hasAnyRole(ADMIN.name(), USER.name())
+				.antMatchers(ALL_URLS).permitAll()
 				.anyRequest()
 				.authenticated()
 
@@ -48,9 +59,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// standard login form that sends 204-NO_CONTENT when login is OK and 401-UNAUTHORIZED when login fails
 				.and()
 				.formLogin()
-				.loginProcessingUrl("/api/login")
+				.loginProcessingUrl(LOGIN_URL)
 
-				.usernameParameter("email")
+				.usernameParameter(USERNAME_PARAMETER)
 				.successHandler((req, res, auth) -> res.setStatus(HttpStatus.NO_CONTENT.value()))
 				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
 
@@ -58,10 +69,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.logout((logout) -> logout
 						.invalidateHttpSession(true)
-						.logoutUrl("/api/logout")
+						.logoutUrl(LOGOUT_URL)
 						.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT))
 				);
-
 
 	}
 
@@ -89,6 +99,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //		source.registerCorsConfiguration("/**", config);
 //		return new CorsFilter(source);
 //	}
-
 
 }

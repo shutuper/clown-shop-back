@@ -7,7 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.Objects;
+
+import static com.brigada7.clownshopback.models.enums.InventoryStatus.*;
 
 @Entity
 @Getter
@@ -35,9 +40,9 @@ public class Product {
 	private String category;
 
 	@Column(nullable = false)
-	private String image; // url
+	private String image = "https://www.svgrepo.com/show/86025/delivery-package.svg";
 
-	@Size(max = 5)
+	@Max(5)
 	@Column(nullable = false)
 	private Integer rating = 0;
 
@@ -48,15 +53,5 @@ public class Product {
 		this.id = id;
 	}
 
-	public Product(ProductDTO productDTO) {
-		this.name = productDTO.getName();
-		this.description = productDTO.getDescription();
-		this.quantity = productDTO.getQuantity();
-		this.category = productDTO.getCategory();
-		this.image = productDTO.getImage();
-		this.price = productDTO.getPrice();
-		this.inventoryStatus = InventoryStatus.valueOf(
-				productDTO.getInventoryStatus().toUpperCase()
-		);
-	}
+
 }

@@ -23,15 +23,14 @@ public class OrdersController {
 
 
 	@PostMapping
-	public ResponseEntity makeOrder(@RequestBody OrdersDTO orderDTO,
-	                                Authentication authentication) {
+	public ResponseEntity<?> makeOrder(@RequestBody OrdersDTO orderDTO,
+	                                   Authentication authentication) {
 		try {
 			Orders order = ordersService.makeOrder(orderDTO, authentication);
 			emailSenderService.sendOrderMessage(order, order.getAppUser().getEmail());
-			return new ResponseEntity(order.getOrderId(), HttpStatus.OK);
+			return ResponseEntity.ok(order.getOrderId());
 		} catch (Exception exception) {
-			return new ResponseEntity(exception.getMessage(),
-					HttpStatus.BAD_REQUEST);
+			return ResponseEntity.badRequest().build();
 		}
 	}
 

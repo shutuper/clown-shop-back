@@ -39,22 +39,7 @@ public class ProductController {
 		}
 	}
 
-	@PostMapping
-	public ResponseEntity<?> saveProduct(@RequestBody ProductDTO productDTO) {
-		try {
-			Product product = productService.saveProduct(productDTO);
-			return ResponseEntity.ok().body(product.getId());
-		} catch (IllegalStateException e) {
-			return ResponseEntity.badRequest().build();
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().build();
-		}
-	}
 
-	@GetMapping("admin")
-	public ResponseEntity<?> isAdmin(Authentication authentication) {
-		log.info("Admin entered: {}", ((AppUser) (authentication.getPrincipal())).getEmail());
-		return ResponseEntity.status(HttpStatus.OK).body(new Message(true));
-	}
+
 
 }

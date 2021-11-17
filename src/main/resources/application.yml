@@ -12,14 +12,19 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
+        #        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/clown_shop
-    username: postgres
-    password: 2222
+    url: jdbc:mysql://localhost:3306/web_lab_8
+    username: shut_uper
+    password: 371222
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    driver-class-name: org.postgresql.Driver
+  #    url: jdbc:postgresql://localhost:5432/clown_shop
+  #    username: postgres
+  #    password: 2222
 
   mail:
     host: smtp.gmail.com

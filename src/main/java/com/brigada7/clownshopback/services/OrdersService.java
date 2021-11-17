@@ -29,16 +29,20 @@ public class OrdersService {
 	@Transactional
 	public Orders makeOrder(OrdersDTO orderDTO, Authentication authentication) {
 		log.info(orderDTO.toString());
+
 		AppUser appUser = (AppUser) authentication.getPrincipal();
 		log.info("User {} try to make an order", appUser.getEmail());
+
 		AppUser user = appUserService.getByEmail(appUser.getEmail());
 		Product product = productService.getProductById(orderDTO.getProductId());
+
 		int productQ = product.getQuantity();
 		if (productQ < orderDTO.getQuantity()
 				|| List.of(EXPECTED, OUTOFSTOCK).contains(product.getInventoryStatus()))
 			throw new IllegalStateException("Order quantity bigger than possible quantity");
 
 		changeProductStatus(product, orderDTO.getQuantity());
+
 		Orders order = new Orders(orderDTO);
 		order.setAppUser(user);
 		order.setProduct(product);
@@ -52,8 +56,9 @@ public class OrdersService {
 		int productQ = product.getQuantity();
 		product.setQuantity(productQ - orderQ);
 		productQ = product.getQuantity();
-
-		if (productQ <= 15)
+		if (productQ <= 0)
+			product.setInventoryStatus(OUTOFSTOCK);
+		else if (productQ <= 15)
 			product.setInventoryStatus(LOWSTOCK);
 	}
 
