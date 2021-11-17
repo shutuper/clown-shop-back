@@ -1,0 +1,39 @@
+server:
+  port: 8090
+
+spring:
+
+  config:
+    import: sec.yml
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/clown_shop
+    username: postgres
+    password: 2222
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${infomail.email}
+    password: ${infomail.password}
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
